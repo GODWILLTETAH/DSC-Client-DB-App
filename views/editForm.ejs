@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      .error {
+        color: #ff0099;
+        margin: 10px 2px;
+        font-size: 0.8em;
+        font-weight: bold;
+      }
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 10px;
+        padding: 0;
+        background-color: #f0f5f9;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Ensure the container stretches to the bottom */
+      }
+
+      nav {
+        background-color: #3498db;
+        padding: 10px;
+      }
+
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center; /* Center the menu items horizontally */
+        font-size: 20px; /*x-large*/
+      }
+      nav ul li {
+        margin-right: 20px;
+      }
+
+      nav ul li a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 2px solid #3498db;
+      }
+
+      h1 {
+        color: #3498db;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      button {
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"] {
+        width: 100%;
+        font-size: 16px;
+        color: #555;
+        background-color: #f7f7f7;
+      }
+
+      button {
+        background-color: #3498db;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      input::placeholder {
+        color: #999;
+      }
+
+      input:focus,
+      button:focus {
+        outline: none;
+      }
+
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="tel"]:focus {
+        border: 1px solid #3498db;
+      }
+
+      /* Responsive Styles */
+      @media screen and (max-width: 600px) {
+        .container {
+          padding: 10px;
+        }
+
+        form {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+
+      /* Styling for the footer */
+      footer {
+        flex-shrink: 0; /* Prevent the footer from shrinking */
+        text-align: center;
+        padding: 5px 0;
+        background-color: #007bff;
+        color: #fff;
+        margin-top: auto; /* Push the footer to the bottom */
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSC</title>
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/clients">Clients</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>Edit Record</h1>
+      <form id="form">
+        <div class="email error"></div>
+        <input
+          type="text"
+          id="name"
+          placeholder="Name"
+          name="nom"
+          value="<%=records.nom%>"
+          required
+        />
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          name="email"
+          value="<%=records.email%>"
+          required
+        />
+        <select
+          name="location"
+          required
+          style="
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+          "
+        >
+          <option value="NotSelected"><%= records.location.city %></option>
+          <% cities.forEach(city => { %>
+          <option
+            value="<%= city._id %>"
+            style="
+              padding: 5px;
+              font-size: 14px;
+              background-color: #fff;
+              color: #333;
+            "
+          >
+            <%= city.city %>
+          </option>
+          <% }); %>
+        </select>
+        <input
+          type="text"
+          id="phone"
+          placeholder="Phone"
+          name="phone"
+          value="<%=records.contact%>"
+          required
+        />
+        <input
+          type="text"
+          id="address"
+          placeholder="Address"
+          name="address"
+          value="<%=records.address%>"
+          required
+        />
+        <input
+          type="number"
+          id="count"
+          placeholder="Count"
+          name="count"
+          value="<%=records.count%>"
+          required
+        />
+        <button type="button" id="increaseCount">+</button>
+        <button type="submit">Update</button>
+        <!-- <div>
+          <p>Added By : <%=records.addedBy.name %></p>
+          <p>Date : <%=records.date %></p>
+        </div> -->
+      </form>
+    </div>
+    <footer>
+      <p>&copy; Digital Services Consulting (DSC 2023)</p>
+    </footer>
+
+    <script>
+      const form = document.querySelector("form");
+      const emailError = document.querySelector(".email.error");
+      const increaseCountButton = document.getElementById("increaseCount");
+
+      // Add an event listener for the plus button
+      increaseCountButton.addEventListener("click", () => {
+        const countInput = form.querySelector('input[name="count"]');
+        countInput.value = parseInt(countInput.value || 0) + 1;
+      });
+
+      const clientId = "<%=records._id%>";
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        emailError.textContent = "";
+
+        // Get values
+        const nom = form.nom.value;
+        const email = form.email.value;
+        const contact = form.phone.value;
+        const address = form.address.value;
+        const count = form.count.value;
+        const location = form.location.value;
+
+        try {
+          const res = await fetch(`/api/v1/client/update/${clientId}`, {
+            method: "PUT",
+            body: JSON.stringify({
+              nom,
+              email,
+              address,
+              contact,
+              count,
+              location,
+            }),
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          if (data.success === true) {
+            form.nom.value = nom;
+            form.email.value = email;
+            form.phone.value = contact;
+            form.address.value = address;
+            form.count.value = count;
+            const location = form.location.value;
+
+            emailError.textContent = "UPDATED";
+            window.location.href = "/clients";
+          }
+          if (data.errors) {
+            form.nom.value = nom;
+            form.email.value = email;
+            form.phone.value = contact;
+            form.address.value = address;
+            form.count.value = count;
+            emailError.textContent = data.message;
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      });
+
+      // Input field event listeners to clear the email error
+      form.nom.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.email.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.phone.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.address.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+    </script>
+  </body>
+</html>

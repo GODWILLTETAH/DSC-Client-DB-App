@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        width: 400px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        color: #007bff;
+        text-align: center;
+      }
+      label {
+        font-weight: bold;
+      }
+      input[type='text'],
+      input[type='email'],
+      input[type='password'] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        width: 100%;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .error {
+        color: #ff0099;
+        margin: 10px 2px;
+        font-size: 0.8em;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Connexion</h2>
+      <form id="signin-form">
+        <center>
+          <div class="email error"></div>
+        </center>
+        <div>
+          <center>
+            <div class="email error"></div>
+          </center>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div>
+          <center>
+            <div class="password error"></div>
+          </center>
+          <label for="motDePasse">Mot de passe:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <script>
+      const emailError = document.querySelector('.email.error');
+      const passwordError = document.querySelector('.email.error');
+
+      document
+        .getElementById('signin-form')
+        .addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          // Get user input
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+
+          // Prepare data
+          const userData = {
+            email: email,
+            password: password,
+          };
+
+          fetch('/signin', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log('API Response:', data);
+
+              if (data.error) {
+                emailError.textContent = data.error;
+              } else {
+                window.location.href = '/';
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        });
+    </script>
+  </body>
+</html>

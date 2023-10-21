@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      .error {
+        color: #ff0099;
+        margin: 10px 2px;
+        font-size: 0.8em;
+        font-weight: bold;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSC</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/clients">Clients</a></li>
+
+        <li><a href="/logout">Logout</a></li>
+        <% if (profile.role === "admin") { %>
+
+        <li><a href="/admin">Admin</a></li>
+
+        <% } else { %>
+
+        <li></li>
+
+        <% } %>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>Client Database</h1>
+      <form id="form">
+        <div class="email error"></div>
+        <input type="text" id="name" placeholder="Name" name="nom" required />
+        <select
+          name="location"
+          required
+          style="
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+          "
+        >
+          <option value="" disabled selected hidden>
+            Please select a city
+          </option>
+          <% cities.forEach(city => { %>
+          <option
+            value="<%= city._id %>"
+            style="
+              padding: 5px;
+              font-size: 14px;
+              background-color: #fff;
+              color: #333;
+            "
+          >
+            <%= city.city %>
+          </option>
+          <% }); %>
+        </select>
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          name="email"
+          required
+        />
+        <input
+          type="text"
+          id="phone"
+          placeholder="Phone"
+          name="phone"
+          value="+237"
+          required
+        />
+        <input
+          type="text"
+          id="address"
+          placeholder="Address / Quater"
+          name="address"
+          required
+        />
+
+        <br />
+        <input
+          type="number"
+          id="count"
+          placeholder="Count"
+          name="count"
+          required
+        />
+        <button type="button" id="increaseCount">+</button>
+        <button type="submit" name="submit">Add Client</button>
+      </form>
+    </div>
+    <footer>
+      <p>&copy; Digital Services Consulting (DSC 2023)</p>
+    </footer>
+
+    <script>
+      const form = document.querySelector("form");
+      const emailError = document.querySelector(".email.error");
+      const increaseCountButton = document.getElementById("increaseCount");
+
+      // Add an event listener for the plus button
+      increaseCountButton.addEventListener("click", () => {
+        const countInput = form.querySelector('input[name="count"]');
+        countInput.value = parseInt(countInput.value || 0) + 1;
+      });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        emailError.textContent = "";
+
+        // Get values
+        const nom = form.nom.value;
+        const email = form.email.value;
+        const contact = form.phone.value.split(" ").join("");
+        const address = form.address.value;
+        const count = form.count.value;
+        const location = form.location.value;
+
+        try {
+          const res = await fetch("/api/v1/clients", {
+            method: "POST",
+            body: JSON.stringify({
+              nom,
+              email,
+              address,
+              contact,
+              count,
+              location,
+            }),
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          if (data.success === true) {
+            form.reset();
+            emailError.textContent = "SAVED";
+          }
+          if (data.errors) {
+            form.nom.value = nom;
+            form.email.value = email;
+            form.phone.value = contact;
+            form.address.value = address;
+            emailError.textContent = data.errors.email;
+          }
+        } catch (err) {
+          console.log(err.message);
+        }
+      });
+
+      // Input field event listeners to clear the email error
+      form.nom.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.email.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.phone.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.address.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+    </script>
+  </body>
+</html>

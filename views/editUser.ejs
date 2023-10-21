@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      .error {
+        color: #ff0099;
+        margin: 10px 2px;
+        font-size: 0.8em;
+        font-weight: bold;
+      }
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 10px;
+        padding: 0;
+        background-color: #f0f5f9;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Ensure the container stretches to the bottom */
+      }
+
+      nav {
+        background-color: #3498db;
+        padding: 10px;
+      }
+
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center; /* Center the menu items horizontally */
+        font-size: 20px; /*x-large*/
+      }
+      nav ul li {
+        margin-right: 20px;
+      }
+
+      nav ul li a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 2px solid #3498db;
+      }
+
+      h1 {
+        color: #3498db;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      button {
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"] {
+        width: 100%;
+        font-size: 16px;
+        color: #555;
+        background-color: #f7f7f7;
+      }
+
+      button {
+        background-color: #3498db;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      input::placeholder {
+        color: #999;
+      }
+
+      input:focus,
+      button:focus {
+        outline: none;
+      }
+
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="tel"]:focus {
+        border: 1px solid #3498db;
+      }
+
+      /* Responsive Styles */
+      @media screen and (max-width: 600px) {
+        .container {
+          padding: 10px;
+        }
+
+        form {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+
+      /* Styling for the footer */
+      footer {
+        flex-shrink: 0; /* Prevent the footer from shrinking */
+        text-align: center;
+        padding: 5px 0;
+        background-color: #007bff;
+        color: #fff;
+        margin-top: auto; /* Push the footer to the bottom */
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSC</title>
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/clients">Clients</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>Edit User</h1>
+      <form id="form">
+        <div class="email error"></div>
+        <input
+          type="text"
+          id="name"
+          placeholder="Name"
+          name="name"
+          value="<%=records.name%>"
+          required
+        />
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          name="email"
+          value="<%=records.email%>"
+          required
+        />
+        <label for="motDePasse"> Change Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="type new password"
+        />
+        <br />
+        <div>
+          <label for="role"> Role:</label>
+          <select id="role" name="role">
+            <option value="<%=records.role%>" disabled selected hidden>
+              <%=records.role%>
+            </option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+            <option value="moderator">Moderator</option>
+          </select>
+        </div>
+        <br />
+        <br />
+        <button type="submit">Update</button>
+      </form>
+    </div>
+    <footer>
+      <p>&copy; Digital Services Consulting (DSC 2023)</p>
+    </footer>
+
+    <script>
+      const form = document.querySelector("form");
+      const emailError = document.querySelector(".email.error");
+      const Select = document.getElementById("role");
+
+      const userId = "<%=records._id%>";
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        emailError.textContent = "";
+
+        // Get values
+        const name = form.name.value;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        const role = Select.value;
+
+        try {
+          const res = await fetch(`/user/update/${userId}`, {
+            method: "PUT",
+            body: JSON.stringify({
+              name,
+              email,
+              password,
+              role,
+            }),
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          if (data.success === true) {
+            form.name.value = name;
+            form.email.value = email;
+            Select.value = role;
+            emailError.textContent = "UPDATED";
+
+            setTimeout(function () {
+              window.location.href = "/admin";
+            }, 500);
+          }
+          if (data.errors) {
+            form.name.value = name;
+            form.email.value = email;
+            Select.value = role;
+            emailError.textContent = data.message;
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      });
+
+      // Input field event listeners to clear the email error
+      form.name.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.email.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.address.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Location</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        color: #555;
+      }
+
+      input[type='text'] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button[type='submit'] {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      button[type='submit']:hover {
+        background-color: #45a049;
+      }
+      .error {
+        color: #ff0099;
+        margin: 10px 2px;
+        font-size: 0.8em;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Add Location</h1>
+    <form action="/new-location" method="POST">
+      <center>
+        <div class="email error"></div>
+      </center>
+      <label for="country">Country:</label>
+      <input type="text" id="country" name="country" required />
+      <br />
+      <label for="region">Region:</label>
+      <input type="text" id="region" name="region" required />
+      <br />
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" required />
+      <br />
+      <br />
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      const form = document.querySelector('form');
+      const emailError = document.querySelector('.email.error');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // get values
+        const country = form.country.value;
+        const region = form.region.value;
+        const city = form.city.value;
+
+        try {
+          const res = await fetch('/location/new', {
+            method: 'POST',
+            body: JSON.stringify({ country, region, city }),
+            headers: { 'Content-Type': 'application/json' },
+          });
+          const data = await res.json();
+          if (data.success === true) {
+            form.reset();
+            alert('New user added successfully');
+            window.location.href = '/';
+          }
+          if (data.success === false) {
+            form.country.value = country;
+            form.city.value = city;
+            form.region.value = region;
+            emailError.textContent = data.errors.email;
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      });
+      form.country.addEventListener('input', () => {
+        emailError.textContent = '';
+      });
+
+      form.city.addEventListener('input', () => {
+        emailError.textContent = '';
+      });
+
+      form.region.addEventListener('input', () => {
+        emailError.textContent = '';
+      });
+    </script>
+  </body>
+</html>

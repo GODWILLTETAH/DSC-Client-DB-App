@@ -1,0 +1,144 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        width: 400px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        color: #007bff;
+        text-align: center;
+      }
+      label {
+        font-weight: bold;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        width: 100%;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .error {
+        color: #ff0099;
+        margin: 10px 2px;
+        font-size: 0.8em;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Inscription</h2>
+      <form id="signup-form">
+        <center>
+          <div class="email error"></div>
+        </center>
+        <div>
+          <label for="nom">Nom:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div>
+          <label for="motDePasse">Mot de passe:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <div>
+          <label for="role"> Select a Role:</label>
+          <select id="role" name="role" required>
+            <option value="" disabled selected hidden>
+              Please select a role
+            </option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+            <option value="moderator">Moderator</option>
+          </select>
+        </div>
+        <br />
+        <br />
+        <button type="submit">S'inscrire</button>
+      </form>
+    </div>
+
+    <script>
+      const form = document.querySelector("form");
+      const emailError = document.querySelector(".email.error");
+
+      const Select = document.getElementById("role");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // get values
+        const name = form.name.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        const role = Select.value;
+
+        try {
+          const res = await fetch("/user", {
+            method: "POST",
+            body: JSON.stringify({ name, email, password, role }),
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          if (data.success === true) {
+            form.reset();
+            alert("New user added successfully");
+            window.location.href = "/admin";
+          }
+          if (data.errors) {
+            form.name.value = name;
+            form.email.value = email;
+            form.password.value = password;
+            emailError.textContent = data.errors.email;
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      });
+      form.name.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+
+      form.email.addEventListener("input", () => {
+        emailError.textContent = "";
+      });
+    </script>
+  </body>
+</html>

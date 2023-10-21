@@ -1,0 +1,26 @@
+{
+  "name": "clientdatabaseapp",
+  "version": "1.0.0",
+  "description": "a client database app for Digital Services Consulting Company",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Godwill Tetah",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "exceljs": "^4.3.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.4.1"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
+  }
+}
