@@ -23,7 +23,7 @@ services:
       JWT_SECRET: "XYZ237"
 
     depends_on:
-      - mongo_db
+      - mongo
 
 volumes:
   mongo_data: {}
