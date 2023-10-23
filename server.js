@@ -33,4 +33,6 @@ app.use("/api/v1/", clientRoutes);
 app.use("/", indexRoutes);
 app.use("/location", locationRoutes);
 
-app.listen(PORT, () => console.log(`server listening on port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`server listening on port ${PORT}`),
+);
