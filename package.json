@@ -4,7 +4,7 @@
   "description": "a client database app for Digital Services Consulting Company",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "author": "Godwill Tetah",
   "license": "ISC",
