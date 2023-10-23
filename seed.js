@@ -1,8 +1,8 @@
 require("dotenv").config();
 
 const mongoose = require("mongoose");
-const User = require("../models/user");
-const Location = require("../models/location");
+const User = require("./models/user");
+const Location = require("./models/location");
 const bcrypt = require("bcrypt");
 
 //console.log(`${process.env.DATABASE}`);
