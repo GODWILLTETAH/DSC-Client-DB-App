@@ -28,4 +28,5 @@ services:
       - mongo
 
 volumes:
-  mongo_data: {}
+  mongo_data:
+    name: dsc-client-db-app_mongo_data
