@@ -7,9 +7,15 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: !GLORYBE2GOD
+
     restart: always
     volumes:
       - mongo_data:/data/db
+
+    command: [--auth]
 
   # Node api service
   api:
@@ -28,5 +34,4 @@ services:
       - mongo
 
 volumes:
-  mongo_data:
-    name: dsc-client-db-app_mongo_data
+  mongo_data: {}
