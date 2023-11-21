@@ -6,7 +6,7 @@ services:
     container_name: db_container
     image: mongo
     ports:
-      - "27017:27017"
+      - "27018:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: !GLORYBE2GOD
@@ -14,7 +14,6 @@ services:
     restart: always
     volumes:
       - mongo_data:/data/db
-
     command: [--auth]
 
   # Node api service
