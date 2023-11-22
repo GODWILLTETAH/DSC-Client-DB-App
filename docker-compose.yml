@@ -8,10 +8,10 @@ services:
     restart: always
 
     ports:
-      - "27017:27017"
+      - "27018:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: !GLORYBE2GOD
+      MONGO_INITDB_ROOT_PASSWORD: "!GLORYBE2GOD"
 
     volumes:
       - mongo_data:/data/db
