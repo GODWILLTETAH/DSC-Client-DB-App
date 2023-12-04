@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 
 //console.log(`${process.env.DATABASE}`);
 
-const DB = `mongodb://admin:!GLORYBE2GOD@mongo:27018/DSC_Client_Database?authSource=admin`;
+const DB = `mongodb://admin:!GLORYBE2GOD@157.230.238.34:27018/DSC_Client_Database?authSource=admin`;
 
 mongoose
   .connect(DB, {
