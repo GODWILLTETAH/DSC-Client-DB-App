@@ -10,13 +10,16 @@ const bcrypt = require("bcrypt");
 //const DB = `mongodb://admin:!GLORYBE2GOD@mongo:27018/DSC_Client_Database`;
 //DATABASE=mongodb://localhost:27017/DSC_Client_Database
 
-const DB = `mongodb://admin3:GloryToGod123@mongo:27018/DSC_Client_Database`;
+//const DB = `mongodb://admin3:GloryToGod123@157.230.238.34:27018/DSC_Client_Database?authSource=admin`;
 
 mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb://admin3:GloryToGod123@157.230.238.34:27018/DSC_Client_Database",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  )
   .then(() => console.log("DATABASE CONNECTED"))
   .catch(() => console.log("DATABASE CONNECTION ERROR"));
 // Define user and location data
