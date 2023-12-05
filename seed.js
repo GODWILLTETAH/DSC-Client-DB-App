@@ -14,7 +14,7 @@ const bcrypt = require("bcrypt");
 
 mongoose
   .connect(
-    "mongodb://admin3:GloryToGod123@157.230.238.34:27018/DSC_Client_Database?authSource=admin",
+    "mongodb://admin3:GloryToGod123@mongo:27018/DSC_Client_Database?authSource=admin",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
