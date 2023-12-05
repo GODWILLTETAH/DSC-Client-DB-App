@@ -19,10 +19,13 @@ app.use(express.static("assets"));
 app.use(cookieParser());
 
 mongoose
-  .connect(DATABASE, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb://admin3:GloryToGod123@157.230.238.34:27018/DSC_Client_Database?authSource=admin",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  )
   .then(() => console.log("DATABASE CONNECTED"))
   .catch(() => console.log("DATABASE CONNECTION ERROR"));
 
