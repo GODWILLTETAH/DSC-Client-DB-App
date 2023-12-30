@@ -172,7 +172,6 @@
           placeholder="Email"
           name="email"
           value="<%=records.email%>"
-          required
         />
         <select
           name="location"
@@ -186,7 +185,9 @@
             outline: none;
           "
         >
-          <option value="NotSelected"><%= records.location.city %></option>
+          <option value="<%= records.location.city._id %>">
+            <%= records.location.city %>
+          </option>
           <% cities.forEach(city => { %>
           <option
             value="<%= city._id %>"
